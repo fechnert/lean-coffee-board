@@ -43,12 +43,13 @@ class Board(UUIDModel):
     phase = models.CharField(max_length=1, choices=Phases.choices, default=Phases.THINK)
 
     # board settings
+    title = models.CharField(max_length=512)
     vote_limit = models.PositiveSmallIntegerField(default=3)
     think_time_limit = models.DurationField()
     discuss_time_limit = models.DurationField()
 
     def __str__(self):
-        return str(self.id)
+        return self.title
 
 
 class Lane(UUIDModel, SortableBoardObject):

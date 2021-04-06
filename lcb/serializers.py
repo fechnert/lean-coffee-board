@@ -11,6 +11,7 @@ class BoardSerializer(serializers.ModelSerializer):
             'id',
             'created',
             'phase',
+            'title',
             'vote_limit',
             'think_time_limit',
             'discuss_time_limit',

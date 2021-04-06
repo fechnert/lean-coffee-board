@@ -1,10 +1,11 @@
 <template>
   <div class="container mx-auto mt-8">
 
-    <div>
-      <h1>Board view</h1>
+    <div class="pl-4">
+      <h1 class="text-2xl font-bold">{{ board.title }}</h1>
     </div>
 
+    <!-- TODO: this cant stay at "grid-cols-3" but have to adjust itself somehow -->
     <div class="grid grid-cols-3 gap-4 mt-8">
       <Lane v-for="lane in lanes" :key="lane.id" :lane="lane"></Lane>
     </div>
@@ -24,7 +25,7 @@ export default {
   data: function() {
     return {
       loading: false,
-      board: null,
+      board: {title: ""},
       lanes: [],
     }
   },
@@ -34,7 +35,7 @@ export default {
   },
   methods: {
     async loadBoard() {
-      this.board = await api.getBoard('3f025178-3777-4890-ab0a-ac0f4df3c36d')
+      this.board = await api.getBoard('6a5c92ce-8222-4ca8-919c-89bbe09a73bd')
       console.log(this.board)
     },
     async loadLanes() {
