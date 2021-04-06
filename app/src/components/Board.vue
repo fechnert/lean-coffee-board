@@ -1,11 +1,11 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto mt-8">
 
     <div>
       <h1>Board view</h1>
     </div>
 
-    <div>
+    <div class="grid grid-cols-3 gap-4 mt-8">
       <Lane v-for="lane in lanes" :key="lane.id" :lane="lane"></Lane>
     </div>
 

@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <p>This is a Card with title "{{ title }}"</p>
+  <div class="bg-white p-4 rounded shadow mb-4">
+    <p>{{ card.title }}</p>
+    <p></p>
   </div>
 </template>
 
@@ -8,7 +9,7 @@
 export default {
   name: "Card",
   props: {
-    title: String
+    card: Object
   }
 }
 </script>
