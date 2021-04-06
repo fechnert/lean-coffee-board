@@ -20,7 +20,6 @@ class SortableBoardObject(models.Model):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            import pudb; pu.db
             max_obj_pos = self.__class__.objects.filter(board=self.board).order_by('position').last()
             self.position = max_obj_pos.position + 1 if max_obj_pos else 1
 
