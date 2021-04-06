@@ -22,16 +22,13 @@ export default {
       return req.data
     })
   },
-  getBoards() {
-    return this.execute('get', `boards/`)
+  getBoard(board_id) {
+    return this.execute('get', `boards/${board_id}/`)
   },
-  getBoard(id) {
-    return this.execute('get', `boards/${id}/`)
+  getLanesOfBoard(board_id) {
+    return this.execute('get', `lanes/?board=${board_id}`)
   },
-  getLanes() {
-    return this.execute('get', 'lanes/')
-  },
-  getCards() {
-    return this.execute('get', 'cards/')
+  getCardsOfLane(lane_id) {
+    return this.execute('get', `cards/?lane=${lane_id}`)
   }
 }

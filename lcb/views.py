@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from django.conf import settings
 
 from lcb import models
@@ -28,8 +30,14 @@ class LaneViewSet(viewsets.ModelViewSet):
     queryset = models.Lane.objects.all()
     serializer_class = serializers.LaneSerializer
 
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['board']
+
 
 class CardViewSet(viewsets.ModelViewSet):
 
     queryset = models.Card.objects.all()
     serializer_class = serializers.CardSerializer
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['board', 'lane', 'owner']

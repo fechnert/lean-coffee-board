@@ -13,22 +13,29 @@
 </template>
 
 <script>
+import api from "../api";
 import Card from "./Card";
 
 export default {
   name: "Lane",
   props: {
-    lane: Object
+    lane: Object,
   },
   components: {
     Card
   },
   data: function() {
     return {
-      cards: [
-        {title: "Ich bin eine Card", id:"5"},
-        {title: "Hier kann auch was stehen", id:"9"},
-      ]
+      loading: false,
+      cards: [],
+    }
+  },
+  async created() {
+    await this.loadCards()
+  },
+  methods: {
+    async loadCards() {
+      this.cards = await api.getCardsOfLane(this.lane.id)
     }
   }
 }

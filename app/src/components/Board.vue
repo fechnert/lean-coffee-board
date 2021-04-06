@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import Lane from "./Lane";
 import api from "../api";
+import Lane from "./Lane";
 
 export default {
   name: "Board",
@@ -29,16 +29,16 @@ export default {
     }
   },
   async created() {
-    this.loadBoard()
-    this.loadLanes()
+    await this.loadBoard()
+    await this.loadLanes()
   },
   methods: {
     async loadBoard() {
-      this.board = await api.getBoard('2e86f49e-f5e2-4c2f-af58-21300f5290c7')
+      this.board = await api.getBoard('3f025178-3777-4890-ab0a-ac0f4df3c36d')
       console.log(this.board)
     },
     async loadLanes() {
-      this.lanes = await api.getLanes()
+      this.lanes = await api.getLanesOfBoard(this.board.id)
       console.log(this.lanes)
     }
   }
