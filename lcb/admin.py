@@ -11,8 +11,8 @@ class BoardAdmin(admin.ModelAdmin):
 
 @admin.register(Lane)
 class LaneAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'board', 'position']
-    ordering = ['board', 'position']
+    list_display = ['id', 'title', 'board', 'type', 'position']
+    ordering = ['board', '-type', 'position']
 
 
 @admin.register(Card)

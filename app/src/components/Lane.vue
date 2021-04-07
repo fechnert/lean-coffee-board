@@ -9,8 +9,14 @@
       <Card v-for="card in cards" :key="card.id" :card="card"></Card>
     </div>
 
-    <div class="p-4 rounded mb-4 text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow">
-      <p>+ Add Card</p>
+    <div v-if="lane.type === 'g'" class="p-4 rounded mb-4 text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow">
+      <a>+ Add Card</a>
+    </div>
+
+    <div v-if="lane.type === 'd'" class="p-4">
+      <p class="text-gray-400">
+        <i>Cards will be moved into this lane automatically after the voting phase has finished</i>
+      </p>
     </div>
 
   </div>

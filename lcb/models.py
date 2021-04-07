@@ -48,6 +48,11 @@ class Board(UUIDModel):
     think_time_limit = models.DurationField()
     discuss_time_limit = models.DurationField()
 
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            Lane.objects.create(board=self, type=Lane.Types.DISCUSS, title="To Discuss")
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
@@ -55,7 +60,12 @@ class Board(UUIDModel):
 class Lane(UUIDModel, SortableBoardObject):
     """Lane for assigning Cards to different categories"""
 
+    class Types(models.TextChoices):
+        GATHER = 'g', 'Gather'
+        DISCUSS = 'd', 'Discuss'
+
     board = models.ForeignKey('Board', on_delete=models.CASCADE)
+    type = models.CharField(max_length=1, choices=Types.choices, default=Types.GATHER)
 
     title = models.CharField(max_length=512)
 

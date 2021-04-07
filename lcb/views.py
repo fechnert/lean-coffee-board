@@ -1,5 +1,4 @@
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -30,8 +29,10 @@ class LaneViewSet(viewsets.ModelViewSet):
     queryset = models.Lane.objects.all()
     serializer_class = serializers.LaneSerializer
 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['board']
+    ordering_fields = ['position', 'type']
+    ordering = ['-type', 'position']
 
 
 class CardViewSet(viewsets.ModelViewSet):

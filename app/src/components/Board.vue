@@ -5,8 +5,7 @@
       <h1 class="text-2xl font-bold">{{ board.title }}</h1>
     </div>
 
-    <!-- TODO: this cant stay at "grid-cols-3" but have to adjust itself somehow -->
-    <div class="grid grid-cols-3 gap-4 mt-8">
+    <div class="grid grid-flow-col auto-cols-fr gap-8 mt-8">
       <Lane v-for="lane in lanes" :key="lane.id" :lane="lane"></Lane>
     </div>
 
@@ -35,7 +34,7 @@ export default {
   },
   methods: {
     async loadBoard() {
-      this.board = await api.getBoard('6a5c92ce-8222-4ca8-919c-89bbe09a73bd')
+      this.board = await api.getBoard('ebaa16ce-8803-44f0-8389-9830eb79902a')
       console.log(this.board)
     },
     async loadLanes() {

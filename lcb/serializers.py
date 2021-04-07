@@ -26,6 +26,7 @@ class LaneSerializer(serializers.ModelSerializer):
             'id',
             'board',
             'position',
+            'type',
             'title',
         ]
 
