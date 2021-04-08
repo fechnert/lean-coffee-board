@@ -4,12 +4,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 import './index.css';
 
 import App from "./App";
-import Dashboard from "./components/Dashboard";
+import Home from "./components/Home";
 import CreateBoard from "./components/CreateBoard";
 import Board from "./components/Board";
 
 const routes = [
-  { path: '/', component: Dashboard },
+  { path: '/', component: Home },
   { path: '/create', component: CreateBoard },
   { path: '/board', component: Board },
 ]

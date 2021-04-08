@@ -9,6 +9,7 @@ class BoardSerializer(serializers.ModelSerializer):
         model = models.Board
         fields = [
             'id',
+            'owner',
             'created',
             'phase',
             'title',
@@ -19,6 +20,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
 
 class LaneSerializer(serializers.ModelSerializer):
+    position = serializers.IntegerField(required=False)
 
     class Meta:
         model = models.Lane
@@ -32,11 +34,13 @@ class LaneSerializer(serializers.ModelSerializer):
 
 
 class CardSerializer(serializers.ModelSerializer):
+    position = serializers.IntegerField(required=False)
 
     class Meta:
         model = models.Card
         fields = [
             'id',
+            'owner',
             'board',
             'lane',
             'position',

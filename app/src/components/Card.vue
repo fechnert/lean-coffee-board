@@ -1,7 +1,6 @@
 <template>
   <div class="bg-white p-4 rounded shadow mb-4">
     <p>{{ card.title }}</p>
-    <p></p>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto mt-8">
     <h1>Welcome!</h1>
   </div>
 </template>

@@ -30,5 +30,13 @@ export default {
   },
   getCardsOfLane(lane_id) {
     return this.execute('get', `cards/?lane=${lane_id}`)
-  }
+  },
+  createCard(owner_id, board_id, lane_id, title) {
+    return this.execute('post', `cards/`, {
+      owner: owner_id,
+      board: board_id,
+      lane: lane_id,
+      title: title,
+    })
+  },
 }

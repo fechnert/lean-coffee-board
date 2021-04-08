@@ -46,6 +46,9 @@ export default {
   methods: {
     async loadCards() {
       this.cards = await api.getCardsOfLane(this.lane.id)
+    },
+    async createCard(title) {
+      this.cards.push(await api.createCard(1, '', this.lane.id, title))
     }
   }
 }
