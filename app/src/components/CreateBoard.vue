@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto mt-8">
+  <div>
     <h1>Create Board</h1>
   </div>
 </template>

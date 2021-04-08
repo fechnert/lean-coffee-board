@@ -6,11 +6,23 @@
     </div>
 
     <div>
-      <Card v-for="card in cards" :key="card.id" :card="card"></Card>
+      <Card
+          v-for="card in cards"
+          :key="card.id"
+          :board="board"
+          :lane="lane"
+          :card="card"
+          @delete="deleteCard">
+      </Card>
     </div>
 
-    <div v-if="lane.type === 'g'" class="p-4 rounded mb-4 text-gray-400 hover:bg-white hover:text-blue-600 hover:shadow">
-      <a>+ Add Card</a>
+    <div v-if="lane.type === 'g'" class="p-4 rounded mb-4 text-gray-400 bg-white shadow focus-within:ring-2">
+      <input
+          class="w-full focus:outline-none"
+          type="text"
+          v-model="form.title"
+          @keypress.enter="createCard(form.title)"
+          placeholder="+ Add Card">
     </div>
 
     <div v-if="lane.type === 'd'" class="p-4">
@@ -29,6 +41,7 @@ import Card from "./Card";
 export default {
   name: "Lane",
   props: {
+    board: Object,
     lane: Object,
   },
   components: {
@@ -38,6 +51,9 @@ export default {
     return {
       loading: false,
       cards: [],
+      form: {
+        title: '',
+      }
     }
   },
   async created() {
@@ -48,8 +64,15 @@ export default {
       this.cards = await api.getCardsOfLane(this.lane.id)
     },
     async createCard(title) {
-      this.cards.push(await api.createCard(1, '', this.lane.id, title))
-    }
+      if (title !== "") {
+        this.cards.push(await api.createCard(1, this.board.id, this.lane.id, title))
+        this.form.title = ''
+      }
+    },
+    async deleteCard(cardId) {
+      await api.deleteCard(cardId)
+      this.cards = this.cards.filter(item => item.id !== cardId)
+    },
   }
 }
 </script>

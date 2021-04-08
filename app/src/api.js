@@ -22,21 +22,24 @@ export default {
       return req.data
     })
   },
-  getBoard(board_id) {
-    return this.execute('get', `boards/${board_id}/`)
+  getBoard(boardId) {
+    return this.execute('get', `boards/${boardId}/`)
   },
-  getLanesOfBoard(board_id) {
-    return this.execute('get', `lanes/?board=${board_id}`)
+  getLanesOfBoard(boardId) {
+    return this.execute('get', `lanes/?board=${boardId}`)
   },
-  getCardsOfLane(lane_id) {
-    return this.execute('get', `cards/?lane=${lane_id}`)
+  getCardsOfLane(laneId) {
+    return this.execute('get', `cards/?lane=${laneId}`)
   },
-  createCard(owner_id, board_id, lane_id, title) {
+  createCard(ownerId, boardId, LaneId, title) {
     return this.execute('post', `cards/`, {
-      owner: owner_id,
-      board: board_id,
-      lane: lane_id,
+      owner: ownerId,
+      board: boardId,
+      lane: LaneId,
       title: title,
     })
+  },
+  deleteCard(cardId) {
+    return this.execute('delete', `cards/${cardId}/`)
   },
 }

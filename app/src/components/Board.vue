@@ -1,14 +1,12 @@
 <template>
-  <div class="container mx-auto mt-8">
-
+  <div>
     <div class="pl-4">
       <h1 class="text-2xl font-bold">{{ board.title }}</h1>
     </div>
 
     <div class="grid grid-flow-col auto-cols-fr gap-8 mt-8">
-      <Lane v-for="lane in lanes" :key="lane.id" :lane="lane"></Lane>
+      <Lane v-for="lane in lanes" :key="lane.id" :board="board" :lane="lane"></Lane>
     </div>
-
   </div>
 </template>
 
@@ -34,7 +32,7 @@ export default {
   },
   methods: {
     async loadBoard() {
-      this.board = await api.getBoard('ebaa16ce-8803-44f0-8389-9830eb79902a')
+      this.board = await api.getBoard('6a5c92ce-8222-4ca8-919c-89bbe09a73bd')
       console.log(this.board)
     },
     async loadLanes() {

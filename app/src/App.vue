@@ -2,7 +2,7 @@
   <div class="flex flex-row">
 
     <!-- navigation -->
-    <div class="h-screen w-20 mr-4 bg-gray-500 shadow">
+    <div class="h-screen w-20 bg-gray-500 shadow">
       <div class="my-4">
         <img class="object-contain max-w-full" src="./assets/logo.png" alt="Logo">
       </div>
@@ -26,7 +26,9 @@
     </div>
 
     <!-- app content -->
-    <router-view></router-view>
+    <div class="container mx-auto mt-8">
+      <router-view class="mx-4"></router-view>
+    </div>
 
   </div>
 </template>
