@@ -7,39 +7,37 @@ const client = axios.create({
 })
 
 export default {
-  async execute(method, resource, data) {
-    // inject the accessToken for each request
-    //let accessToken = await Vue.prototype.$auth.getAccessToken()
-    let accessToken = "";
-    return client({
-      method,
-      url: resource,
-      data,
-      headers: {
-        Authorization: `Token ${accessToken}`
-      }
-    }).then(req => {
-      return req.data
+  getBoard(boardId) {
+    return client.get(`boards/${boardId}/`)
+  },
+  createBoard(owner, title, thinkTimeLimit, discussTimeLimit) {
+    return client.post(`boards/`, {
+      owner: owner,
+      title: title,
+      think_time_limit: thinkTimeLimit,
+      discuss_time_limit: discussTimeLimit,
     })
   },
-  getBoard(boardId) {
-    return this.execute('get', `boards/${boardId}/`)
-  },
   getLanesOfBoard(boardId) {
-    return this.execute('get', `lanes/?board=${boardId}`)
+    return client.get(`lanes/?board=${boardId}`)
   },
   getCardsOfLane(laneId) {
-    return this.execute('get', `cards/?lane=${laneId}`)
+    return client.get(`cards/?lane=${laneId}`)
   },
   createCard(ownerId, boardId, LaneId, title) {
-    return this.execute('post', `cards/`, {
+    return client.post(`cards/`, {
       owner: ownerId,
       board: boardId,
       lane: LaneId,
       title: title,
     })
   },
+  updateCard(cardId, title) {
+    return client.patch(`cards/${cardId}/`, {
+      title: title
+    })
+  },
   deleteCard(cardId) {
-    return this.execute('delete', `cards/${cardId}/`)
+    return client.delete(`cards/${cardId}/`)
   },
 }

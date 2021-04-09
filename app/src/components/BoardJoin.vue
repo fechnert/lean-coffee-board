@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Create Board</h1>
+    <h1>Join a Board</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CreateBoard"
+  name: "BoardJoin"
 }
 </script>
 

@@ -5,13 +5,15 @@ import './index.css';
 
 import App from "./App";
 import Home from "./components/Home";
-import CreateBoard from "./components/CreateBoard";
 import Board from "./components/Board";
+import BoardCreate from "./components/BoardCreate";
+import BoardJoin from "./components/BoardJoin";
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/create', component: CreateBoard },
-  { path: '/board', component: Board },
+  { path: '/', name: 'home', component: Home },
+  { path: '/board/create/', name: 'boardCreate', component: BoardCreate },
+  { path: '/board/join/:id/', name: 'boardJoin', component: BoardJoin },
+  { path: '/board/:id/', name: 'boardDetail', component: Board },
 ]
 
 const router = createRouter({
@@ -22,5 +24,3 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router)
 app.mount('#app')
-
-//createApp(App).mount('#app')

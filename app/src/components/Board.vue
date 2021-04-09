@@ -1,11 +1,21 @@
 <template>
   <div>
-    <div class="pl-4">
-      <h1 class="text-2xl font-bold">{{ board.title }}</h1>
+    <div v-if="loading">
+      <p>Loading Board ...</p>
     </div>
+    <div v-else>
+      <div v-if="board !== null">
+        <div class="pl-4">
+          <h1 class="text-2xl font-bold">{{ board.title }}</h1>
+        </div>
 
-    <div class="grid grid-flow-col auto-cols-fr gap-8 mt-8">
-      <Lane v-for="lane in lanes" :key="lane.id" :board="board" :lane="lane"></Lane>
+        <div class="grid grid-flow-col auto-cols-fr gap-8 mt-8">
+          <Lane v-for="lane in lanes" :key="lane.id" :board="board" :lane="lane"></Lane>
+        </div>
+      </div>
+      <div v-else>
+        <p>No such board!</p>
+      </div>
     </div>
   </div>
 </template>
@@ -21,23 +31,33 @@ export default {
   },
   data: function() {
     return {
-      loading: false,
-      board: {title: ""},
+      loading: true,
+      board: null,
       lanes: [],
     }
   },
   async created() {
     await this.loadBoard()
-    await this.loadLanes()
+    if (this.board !== null) {
+      await this.loadLanes()
+    }
   },
   methods: {
     async loadBoard() {
-      this.board = await api.getBoard('6a5c92ce-8222-4ca8-919c-89bbe09a73bd')
-      console.log(this.board)
+      await api.getBoard(this.$route.params.id).then(response => {
+        this.board = response.data
+      }).catch(error => {
+        if (error.response.status !== 404) {
+          console.log(error)
+        }
+      }).finally(() => {
+        this.loading = false
+      })
     },
     async loadLanes() {
-      this.lanes = await api.getLanesOfBoard(this.board.id)
-      console.log(this.lanes)
+      await api.getLanesOfBoard(this.board.id).then(response => {
+        this.lanes = response.data
+      })
     }
   }
 }

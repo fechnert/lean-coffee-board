@@ -13,15 +13,15 @@
           </router-link>
         </div>
         <div class="flex justify-center mt-4">
-          <router-link class="p-1 text-gray-100 rounded hover:bg-gray-600" to="/create">
+          <router-link class="p-1 text-gray-100 rounded hover:bg-gray-600" to="/board/create">
             <PlusCircleIcon class="h-8 w-8"></PlusCircleIcon>
           </router-link>
         </div>
-        <div class="flex justify-center mt-4">
-          <router-link class="p-1 text-gray-100 rounded hover:bg-gray-600" to="/board">
-            <ClipboardIcon class="h-8 w-8"></ClipboardIcon>
-          </router-link>
-        </div>
+<!--        <div class="flex justify-center mt-4">-->
+<!--          <router-link class="p-1 text-gray-100 rounded hover:bg-gray-600" to="/board">-->
+<!--            <ViewGridIcon class="h-8 w-8"></ViewGridIcon>-->
+<!--          </router-link>-->
+<!--        </div>-->
       </div>
     </div>
 
@@ -34,14 +34,14 @@
 </template>
 
 <script>
-import { HomeIcon, PlusCircleIcon, ClipboardIcon } from '@heroicons/vue/outline'
+import { HomeIcon, PlusCircleIcon, /*ViewGridIcon*/ } from '@heroicons/vue/outline'
 
 export default {
   name: "App",
   components: {
     HomeIcon,
     PlusCircleIcon,
-    ClipboardIcon,
+    // ViewGridIcon,
   }
 }
 </script>
