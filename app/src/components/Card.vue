@@ -11,7 +11,7 @@
           class="w-full focus:outline-none bg-white"
           type="text"
           v-model="title"
-          @keypress.enter="updateCard(card.id, title)">
+          @keyup="updateCard(card.id, title)">
     </div>
   </div>
 </template>

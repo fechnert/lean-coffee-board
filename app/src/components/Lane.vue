@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import api from "../api";
 import Card from "./Card";
 
@@ -85,18 +86,12 @@ export default {
         })
       }
     },
-    async updateCard(cardId, title) {
+    updateCard: _.debounce(async function (cardId, title) {
       await api.updateCard(cardId, title).then(response => {
         let index = this.cards.findIndex((card => card.id === cardId))
         this.cards[index] = response.data
-
-        // this.cards.forEach(card => {
-        //   if (card.id === cardId) {
-        //     card = response.data
-        //   }
-        // })
       })
-    },
+    }, 800),
     async deleteCard(cardId) {
       await api.deleteCard(cardId).then(() => {
         this.cards = this.cards.filter(item => item.id !== cardId)
