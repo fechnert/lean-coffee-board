@@ -1,7 +1,7 @@
 import uuid
 
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction
 
 
 class UUIDModel(models.Model):
@@ -13,17 +13,53 @@ class UUIDModel(models.Model):
         abstract = True
 
 
-class SortableBoardObject(models.Model):
-    """Abstract class for models with a defined position / ordering in a given board"""
+class SortableMixin(models.Model):
+    """Abstract class for models with a defined position"""
 
     position = models.PositiveSmallIntegerField(blank=True)
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            max_obj_pos = self.__class__.objects.filter(board=self.board).order_by('position').last()
-            self.position = max_obj_pos.position + 1 if max_obj_pos else 1
+            self.create()
+        else:
+            self.move()
 
         return super().save(*args, **kwargs)
+
+    def get_sortable_queryset(self):
+        """Called to get the queryset to sort for"""
+        raise NotImplementedError()
+
+    def create(self):
+        """Called if a new element is created"""
+        result = self.get_sortable_queryset().aggregate(models.Max('position'))
+        max_pos = result.get('position__max')
+        self.position = 0 if max_pos is None else max_pos + 1
+
+    def move(self, qs=None, old_instance=None):
+        """Called if an element needs to be moved"""
+        qs = qs or self.get_sortable_queryset()
+        old_instance = old_instance or self.__class__.objects.get(id=self.id)
+
+        with transaction.atomic():
+            if old_instance.position > self.position:
+                qs.filter(
+                    position__lt=old_instance.position,
+                    position__gte=self.position,
+                ).exclude(
+                    id=self.id
+                ).update(
+                    position=models.F('position') + 1,
+                )
+            else:
+                qs.filter(
+                    position__lte=self.position,
+                    position__gt=old_instance.position,
+                ).exclude(
+                    id=self.id
+                ).update(
+                    position=models.F('position') - 1,
+                )
 
     class Meta:
         abstract = True
@@ -58,7 +94,7 @@ class Board(UUIDModel):
         return self.title
 
 
-class Lane(UUIDModel, SortableBoardObject):
+class Lane(UUIDModel, SortableMixin):
     """Lane for assigning Cards to different categories"""
 
     class Types(models.TextChoices):
@@ -70,14 +106,17 @@ class Lane(UUIDModel, SortableBoardObject):
 
     title = models.CharField(max_length=512)
 
-    class Meta:
-        unique_together = ('board', 'position')
+    def get_sortable_queryset(self):
+        return Lane.objects.filter(board=self.board, type=self.Types.GATHER)
+
+    # class Meta:
+    #     unique_together = ('board', 'position')
 
     def __str__(self):
         return self.title
 
 
-class Card(UUIDModel, SortableBoardObject):
+class Card(UUIDModel, SortableMixin):
     """Card which is assigned to a board"""
 
     board = models.ForeignKey('Board', on_delete=models.CASCADE)
@@ -87,8 +126,40 @@ class Card(UUIDModel, SortableBoardObject):
     title = models.CharField(max_length=512)
     votes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="cards_voted", blank=True)
 
-    class Meta:
-        unique_together = ('board', 'position')
+    def get_sortable_queryset(self):
+        return Card.objects.filter(lane=self.lane)
+
+    def move(self, *args, **kwargs):
+        qs = self.get_sortable_queryset()
+        old_instance = self.__class__.objects.get(id=self.id)
+
+        with transaction.atomic():
+
+            # its possible to move cards to another lane
+            if old_instance.lane != self.lane:
+
+                # move cards of old lane one position back to fill the gap
+                Card.objects.filter(
+                    lane=old_instance.lane,
+                    position__gt=old_instance.position,
+                ).exclude(
+                    id=self.id
+                ).update(
+                    position=models.F('position') - 1,
+                )
+
+                # move cards of new lane one position forward to create a gap
+                qs.filter(
+                    position__gte=self.position,
+                ).update(
+                    position=models.F('position') + 1,
+                )
+
+            else:
+                super().move(qs, old_instance)
+
+    # class Meta:
+    #     unique_together = ('lane', 'position')
 
     def __str__(self):
         return self.title

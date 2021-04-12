@@ -51,7 +51,7 @@ export default {
   },
   components: {
     draggable,
-    Card
+    Card,
   },
   data: function() {
     return {
@@ -101,9 +101,10 @@ export default {
     async moveCard(event, lane) {
       if (event.added) {
         const card = event.added.element
-        await api.updateCard(card.id, card.title, lane.id)
+        await api.updateCard(card.id, card.title, lane.id, event.added.newIndex)
       } else if (event.moved) {
-        console.log("Moved")
+        const card = event.moved.element
+        await api.updateCard(card.id, card.title, lane.id, event.moved.newIndex)
       }
     },
   }

@@ -7,16 +7,14 @@
       <ExclamationCircleIcon v-if="deleteClicked" class="h-auto w-5 text-white cursor-pointer hover:text-red-300" @click="deleteCard(card.id)"></ExclamationCircleIcon>
     </div>
     <div class="rounded-b bg-white p-4">
-      <input
-          class="w-full focus:outline-none bg-white"
-          type="text"
-          v-model="title"
-          @keyup="updateCard(card.id, title)">
+      <Editable v-model:title="title" @keyup="updateCard(card.id, title)"></Editable>
     </div>
   </div>
 </template>
 
 <script>
+import Editable from "./Editable";
+
 import { XCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/outline'
 
 export default {
@@ -27,10 +25,11 @@ export default {
     card: Object
   },
   components: {
+    Editable,
     XCircleIcon,
     ExclamationCircleIcon,
   },
-  data: function() {
+  data() {
     return {
       deleteClicked: false,
       title: this.card.title,

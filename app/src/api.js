@@ -32,10 +32,11 @@ export default {
       title: title,
     })
   },
-  updateCard(cardId, title, lane) {
+  updateCard(cardId, title, lane, position) {
     return client.patch(`cards/${cardId}/`, {
-        title: title,
-        lane: lane,
+      title: title,
+      lane: lane,
+      position: position,
     })
   },
   deleteCard(cardId) {

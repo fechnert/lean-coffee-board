@@ -1,6 +1,6 @@
 from rest_framework import filters, status, viewsets
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -40,5 +40,7 @@ class CardViewSet(viewsets.ModelViewSet):
     queryset = models.Card.objects.all()
     serializer_class = serializers.CardSerializer
 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['board', 'lane', 'owner']
+    ordering_fields = ['position']
+    ordering = ['position']

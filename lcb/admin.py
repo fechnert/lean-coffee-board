@@ -18,4 +18,4 @@ class LaneAdmin(admin.ModelAdmin):
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'board', 'lane', 'owner', 'position']
-    ordering = ['board', 'position']
+    ordering = ['board', 'lane', 'position']
