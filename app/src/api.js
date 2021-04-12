@@ -18,6 +18,13 @@ export default {
       discuss_time_limit: discussTimeLimit,
     })
   },
+  createLaneForBoard(boardId, lane) {
+    return client.post(`lanes/`, {
+      board: boardId,
+      title: lane.title,
+      type: lane.type,
+    })
+  },
   getLanesOfBoard(boardId) {
     return client.get(`lanes/?board=${boardId}`)
   },

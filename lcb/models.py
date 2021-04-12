@@ -84,12 +84,6 @@ class Board(UUIDModel):
     think_time_limit = models.DurationField()
     discuss_time_limit = models.DurationField()
 
-    def save(self, *args, **kwargs):
-        create_lane = bool(self._state.adding)
-        super().save(*args, **kwargs)
-        if create_lane:
-            Lane.objects.create(board=self, type=Lane.Types.DISCUSS, title="To Discuss")
-
     def __str__(self):
         return self.title
 
