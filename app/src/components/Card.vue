@@ -2,7 +2,7 @@
 
   <div class="shadow mb-4 focus-within:ring-2 rounded">
     <div class="rounded-t bg-gray-500 px-4 py-2 flex justify-between cursor-move">
-      <p>By {{ card.owner }}</p>
+      <p>{{ card.owner.name }}</p>
       <XCircleIcon v-if="!deleteClicked" class="h-auto w-5 text-white cursor-pointer hover:text-red-300" @click="confirmDelete()"></XCircleIcon>
       <ExclamationCircleIcon v-if="deleteClicked" class="h-auto w-5 text-white cursor-pointer hover:text-red-300" @click="deleteCard(card.id)"></ExclamationCircleIcon>
     </div>

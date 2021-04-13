@@ -1,4 +1,5 @@
 from .common import *
+from .rest_framework import *
 from .logging import *
 
 try:

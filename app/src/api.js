@@ -7,6 +7,9 @@ const client = axios.create({
 })
 
 export default {
+  login() {
+
+  },
   getBoard(boardId) {
     return client.get(`boards/${boardId}/`)
   },

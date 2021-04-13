@@ -12,8 +12,9 @@ router.register('lanes', views.LaneViewSet)
 router.register('cards', views.CardViewSet)
 
 api_patterns = [
-    path('', include(router.urls)),
+    path('login/', views.LoginView.as_view()),
     path('version/', views.VersionView.as_view()),
+    path('', include(router.urls)),
 ]
 
 urlpatterns = [

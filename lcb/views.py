@@ -1,13 +1,18 @@
+import uuid
+import random
+import string
+
 from rest_framework import filters, status, viewsets
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from django.conf import settings
+from django.contrib.auth.models import User
 
-from lcb import models
-from lcb import serializers
+from lcb import models, serializers, throttles
 
 
 class VersionView(APIView):
@@ -16,6 +21,32 @@ class VersionView(APIView):
         """Return the version of the current running app"""
         data = {"version": settings.VERSION}
         return Response(data, status.HTTP_200_OK)
+
+
+class LoginView(APIView):
+
+    throttle_classes = [throttles.LoginThrottle]
+
+    def post(self, request):
+        """Login by creating a user with the given name and random password"""
+
+        serializer = serializers.LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        name = serializer.validated_data["name"]
+
+        username = str(uuid.uuid4())
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+
+        user = User.objects.create_user(username=username, password=password, first_name=name)
+        token, created = Token.objects.get_or_create(user=user)
+
+        response_data = {
+            'id': username,
+            'name': name,
+            'token': token.key,
+        }
+
+        return Response(status=200, data=response_data)
 
 
 class BoardViewSet(viewsets.ModelViewSet):
