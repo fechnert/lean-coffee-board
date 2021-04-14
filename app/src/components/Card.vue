@@ -1,12 +1,15 @@
 <template>
 
-  <div class="shadow mb-4 focus-within:ring-2 rounded">
-    <div class="rounded-t bg-gray-500 px-4 py-2 flex justify-between cursor-move">
+  <div class="shadow hover:shadow-lg mb-4 rounded-md focus-within:ring-2">
+    <div class="rounded-t-md bg-white text-gray-500 pl-4 pr-2 py-1 flex justify-between border-l-4 border-gray-500" :style="{'border-color': card.owner.color}">
       <p>{{ card.owner.name }}</p>
-      <XCircleIcon v-if="!deleteClicked" class="h-auto w-5 text-white cursor-pointer hover:text-red-300" @click="confirmDelete()"></XCircleIcon>
-      <ExclamationCircleIcon v-if="deleteClicked" class="h-auto w-5 text-white cursor-pointer hover:text-red-300" @click="deleteCard(card.id)"></ExclamationCircleIcon>
+      <div class="flex">
+        <XIcon v-if="!deleteClicked" class="h-auto w-5 text-gray-300 cursor-pointer hover:text-yellow-500" @click="confirmDelete()"></XIcon>
+        <TrashIcon v-if="deleteClicked" class="h-auto w-5 text-gray-300 cursor-pointer hover:text-red-500" @click="deleteCard(card.id)"></TrashIcon>
+        <MenuIcon class="h-auto w-5 cursor-move handle"></MenuIcon>
+      </div>
     </div>
-    <div class="rounded-b bg-white p-4">
+    <div class="rounded-b-md bg-white px-4 py-2 border-l-4 border-gray-500" :style="{'border-color': card.owner.color}">
       <Editable v-model:title="title" @keyup="updateCard(card.id, title)"></Editable>
     </div>
   </div>
@@ -15,7 +18,7 @@
 <script>
 import Editable from "./Editable";
 
-import { XCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/outline'
+import { MenuIcon, XIcon, TrashIcon } from '@heroicons/vue/outline'
 
 export default {
   name: "Card",
@@ -26,8 +29,9 @@ export default {
   },
   components: {
     Editable,
-    XCircleIcon,
-    ExclamationCircleIcon,
+    MenuIcon,
+    XIcon,
+    TrashIcon,
   },
   data() {
     return {
@@ -38,6 +42,7 @@ export default {
   methods: {
     async confirmDelete() {
       this.deleteClicked = true
+      window.setTimeout(() => {this.deleteClicked = false}, 2000)
     },
     async deleteCard(cardId) {
       this.$emit('delete', cardId)

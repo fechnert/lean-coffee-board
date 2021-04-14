@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-lg">Create a Board</h1>
+    <h1 class="text-lg font-bold">Create a Board</h1>
 
     <!-- Board properties -->
     <div class="mt-4">
@@ -24,7 +24,7 @@
       <div class="pt-4">
         <draggable :list="lanes" item-key="id" handle=".handle">
           <template #item="{element}">
-            <div class="bg-white rounded shadow mb-2 p-2 max-w-md focus-within:ring-2">
+            <div class="bg-white rounded shadow hover:shadow-lg mb-2 p-2 max-w-md focus-within:ring-2">
               <div class="flex items-center">
                 <div class="handle cursor-move mr-4"><MenuIcon class="h-auto w-5"></MenuIcon></div>
                 <div class="w-full"><input class="w-full focus:outline-none bg-white" type="text" v-model="element.title"></div>
@@ -60,7 +60,6 @@ export default {
   },
   data: function() {
     return {
-      owner: 1,
       title: '',
       thinkTimeLimit: 360,
       discussTimeLimit: 600,
@@ -70,6 +69,11 @@ export default {
         {id: 3, type: 'g', title: "Du"},
         {id: 999, type: 'd', title: "Discuss"},
       ]
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user
     }
   },
   methods: {
@@ -83,7 +87,7 @@ export default {
       this.lanes = this.lanes.filter(lane => lane.id !== laneId)
     },
     async createBoard() {
-      await api.createBoard(this.owner, this.title, this.thinkTimeLimit, this.discussTimeLimit).then(response => {
+      await api.createBoard(this.user.id, this.title, this.thinkTimeLimit, this.discussTimeLimit).then(response => {
         this.createLanes(response.data.id).then(() => {
           this.$router.push({name: 'boardDetail', params: {id: response.data.id}})
         })

@@ -74,9 +74,10 @@ class Board(UUIDModel):
         VOTE = 'v', 'Vote'
         DISCUSS = 'd', 'Discuss'
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_boards')
     created = models.DateTimeField(auto_now_add=True)
     phase = models.CharField(max_length=1, choices=Phases.choices, default=Phases.THINK)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through='BoardMember', related_name='joined_boards')
 
     # board settings
     title = models.CharField(max_length=512)
@@ -86,6 +87,15 @@ class Board(UUIDModel):
 
     def __str__(self):
         return self.title
+
+
+class BoardMember(UUIDModel):
+    """Relation between a board and a member"""
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    joined = models.DateTimeField(auto_now_add=True)
 
 
 class Lane(UUIDModel, SortableMixin):

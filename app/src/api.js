@@ -7,11 +7,20 @@ const client = axios.create({
 })
 
 export default {
-  login() {
-
+  login(name, color) {
+    return client.post(`login/`, {
+      name: name,
+      color: color,
+    })
   },
   getBoard(boardId) {
     return client.get(`boards/${boardId}/`)
+  },
+  getBoardsByOwner(ownerId, limit=5) {
+    return client.get(`boards/?owner=${ownerId}&limit=${limit}`)
+  },
+  getBoardsByMember(memberId, limit=10) {
+    return client.get(`boards/?member=${memberId}&limit=${limit}`)
   },
   createBoard(owner, title, thinkTimeLimit, discussTimeLimit) {
     return client.post(`boards/`, {

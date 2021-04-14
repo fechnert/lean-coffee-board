@@ -6,11 +6,11 @@
     </div>
 
     <div v-if="loading" class="px-4 pb-4">
-      <p class="text-gray-400"><i>Loading cards ...</i></p>
+      <p class="text-gray-500"><i>Loading cards ...</i></p>
     </div>
     <div v-else>
 
-      <draggable v-model="cards" group="cards" @change="moveCard($event, lane)" item-key="id">
+      <draggable v-model="cards" group="cards" @change="moveCard($event, lane)" item-key="id" handle=".handle">
         <template #item="{ element }">
           <Card :lane="lane" :card="element" @delete="deleteCard" @update="updateCard"></Card>
         </template>
@@ -18,7 +18,7 @@
 
     </div>
 
-    <div v-if="lane.type === 'g'" class="p-4 rounded mb-4 text-gray-400 bg-white shadow focus-within:ring-2">
+    <div v-if="lane.type === 'g'" class="p-4 rounded mb-4 text-gray-500 bg-white shadow focus-within:ring-2">
       <input
           class="w-full focus:outline-none bg-white"
           type="text"
@@ -28,7 +28,7 @@
     </div>
 
     <div v-if="lane.type === 'd'" class="px-4">
-      <p class="text-gray-400">
+      <p class="text-gray-500">
         <i>Cards will be moved into this lane automatically after the voting phase has finished</i>
       </p>
     </div>
@@ -53,7 +53,7 @@ export default {
     draggable,
     Card,
   },
-  data: function() {
+  data() {
     return {
       loading: true,
       cards: [],
@@ -62,13 +62,22 @@ export default {
       }
     }
   },
+  computed: {
+    user() {
+      return this.$store.state.user
+    }
+  },
   async created() {
     await this.loadCards()
+    //this.timer = setInterval(this.loadCards, 5000)
+  },
+  async beforeUnmount() {
+    //clearInterval(this.timer)
   },
   methods: {
     async loadCards() {
       await api.getCardsOfLane(this.lane.id).then(response => {
-        this.cards = response.data
+        this.cards = response.data.results
       }).catch(error => {
         console.log(error)
       }).finally(() => {
@@ -77,7 +86,7 @@ export default {
     },
     async createCard(title) {
       if (title !== "") {
-        await api.createCard(1, this.board.id, this.lane.id, title).then(response => {
+        await api.createCard(this.user.id, this.board.id, this.lane.id, title).then(response => {
           this.cards.push(response.data)
           this.form.title = ''
         }).catch(error => {

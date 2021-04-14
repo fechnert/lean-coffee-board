@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Join a Board</h1>
+    <h1 class="text-lg font-bold">Join a Board</h1>
   </div>
 </template>
 

@@ -56,7 +56,7 @@ export default {
     },
     async loadLanes() {
       await api.getLanesOfBoard(this.board.id).then(response => {
-        this.lanes = response.data
+        this.lanes = response.data.results
       })
     }
   }

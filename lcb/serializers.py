@@ -10,6 +10,7 @@ class LoginSerializer(serializers.Serializer):
     """Parse the name for the user to create"""
 
     name = serializers.CharField(max_length=255)
+    color = serializers.CharField(max_length=7)
 
 
 class OwnerSerializer(serializers.Serializer):
@@ -17,6 +18,7 @@ class OwnerSerializer(serializers.Serializer):
 
     id = serializers.UUIDField(source="username")
     name = serializers.CharField(source="first_name")
+    color = serializers.CharField(source="last_name")
 
     def to_internal_value(self, data):
         if not isinstance(data, str):

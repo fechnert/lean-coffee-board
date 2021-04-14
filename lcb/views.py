@@ -4,6 +4,7 @@ import string
 
 from rest_framework import filters, status, viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -13,6 +14,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from lcb import models, serializers, throttles
+from lcb.filters import BoardFilter
 
 
 class VersionView(APIView):
@@ -32,18 +34,21 @@ class LoginView(APIView):
 
         serializer = serializers.LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         name = serializer.validated_data["name"]
+        color = serializer.validated_data["color"]
 
         username = str(uuid.uuid4())
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
 
-        user = User.objects.create_user(username=username, password=password, first_name=name)
+        user = User.objects.create_user(username=username, password=password, first_name=name, last_name=color)
         token, created = Token.objects.get_or_create(user=user)
 
         response_data = {
             'id': username,
             'name': name,
             'token': token.key,
+            'color': color,
         }
 
         return Response(status=200, data=response_data)
@@ -53,6 +58,20 @@ class BoardViewSet(viewsets.ModelViewSet):
 
     queryset = models.Board.objects.all()
     serializer_class = serializers.BoardSerializer
+
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = BoardFilter
+    ordering_fields = ['created']
+    ordering = ['-created']
+
+    # TODO: implement auth stuff
+    # @action(methods=['post'], detail=True)
+    # def join(self, request, pk):
+    #     board = self.get_object()
+    #     if request.user.is_anonymous:
+    #         return Response(status=204)
+    #     else:
+    #         print("HEYJA!")
 
 
 class LaneViewSet(viewsets.ModelViewSet):
