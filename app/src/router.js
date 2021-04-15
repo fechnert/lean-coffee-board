@@ -8,9 +8,11 @@ import BoardList from "./components/BoardList";
 import BoardCreate from "./components/BoardCreate";
 import BoardJoin from "./components/BoardJoin";
 import Board from "./components/Board";
+import Imprint from "./components/Imprint";
 
 const routes = [
   {path: '/', name: 'home', component: Home},
+  {path: '/imprint/', name: 'imprint', component: Imprint},
   {path: '/login/', name: 'login', component: Login},
   {path: '/boards/', name: 'boardList', component: BoardList, meta: {requireUser: true}},
   {path: '/boards/create/', name: 'boardCreate', component: BoardCreate, meta: {requireUser: true}},

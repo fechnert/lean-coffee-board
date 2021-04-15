@@ -12,6 +12,8 @@
             :to="{name: 'boardDetail', params: {'id': board.id}}">
           <p class="text-xs text-gray-500 mb-1">Created {{ $dayjs(board.created).format('YYYY-MM-DD') }}</p>
           <p>{{ board.title }}</p>
+          <p class="text-xs text-gray-500 mt-1">{{ board.member_count }} Members</p>
+          <p class="text-xs text-gray-500 mt-1">{{ board.card_count }} Cards</p>
         </router-link>
       </div>
     </div>
