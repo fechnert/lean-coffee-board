@@ -15,6 +15,14 @@
 
         <div class="grid grid-flow-col auto-cols-fr gap-8 mt-8">
           <Lane v-for="lane in lanes" :key="lane.id" :board="board" :lane="lane"></Lane>
+
+          <!-- Board meta -->
+          <div>
+            <p>Phase: {{ currentPhase.name }}</p>
+            <p>Members:</p>
+            <p v-for="member in members" :key="member.id">- {{ member.name }}</p>
+          </div>
+
         </div>
       </div>
       <div v-else>

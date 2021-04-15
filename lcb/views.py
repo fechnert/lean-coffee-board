@@ -57,12 +57,17 @@ class LoginView(APIView):
 class BoardViewSet(viewsets.ModelViewSet):
 
     queryset = models.Board.objects.all()
-    serializer_class = serializers.BoardSerializer
 
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = BoardFilter
     ordering_fields = ['created']
     ordering = ['-created']
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.BoardDetailSerializer
+        else:
+            return serializers.BoardSerializer
 
     # TODO: implement auth stuff
     # @action(methods=['post'], detail=True)

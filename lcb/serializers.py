@@ -13,7 +13,7 @@ class LoginSerializer(serializers.Serializer):
     color = serializers.CharField(max_length=7)
 
 
-class OwnerSerializer(serializers.Serializer):
+class UserSerializer(serializers.Serializer):
     """Nested serializer for the owner relation"""
 
     id = serializers.UUIDField(source="username")
@@ -32,7 +32,15 @@ class OwnerSerializer(serializers.Serializer):
 
 class BoardSerializer(serializers.ModelSerializer):
 
-    owner = OwnerSerializer()
+    owner = UserSerializer()
+    member_count = serializers.SerializerMethodField(read_only=True)
+    card_count = serializers.SerializerMethodField(read_only=True)
+
+    def get_member_count(self, board):
+        return board.members.count()
+
+    def get_card_count(self, board):
+        return board.cards.count()
 
     class Meta:
         model = models.Board
@@ -45,6 +53,33 @@ class BoardSerializer(serializers.ModelSerializer):
             'vote_limit',
             'think_time_limit',
             'discuss_time_limit',
+            'member_count',
+            'card_count',
+        ]
+
+
+class BoardDetailSerializer(serializers.ModelSerializer):
+
+    owner = UserSerializer()
+    members = UserSerializer(many=True, read_only=True)
+    phases = serializers.SerializerMethodField(read_only=True)
+
+    def get_phases(self, board):
+        return [{'id': k, 'name': v} for k, v in board.Phases.choices]
+
+    class Meta:
+        model = models.Board
+        fields = [
+            'id',
+            'owner',
+            'created',
+            'phase',
+            'phases',
+            'title',
+            'vote_limit',
+            'think_time_limit',
+            'discuss_time_limit',
+            'members',
         ]
 
 
@@ -66,7 +101,7 @@ class LaneSerializer(serializers.ModelSerializer):
 class CardSerializer(serializers.ModelSerializer):
 
     position = serializers.IntegerField(required=False)
-    owner = OwnerSerializer()
+    owner = UserSerializer()
 
     class Meta:
         model = models.Card

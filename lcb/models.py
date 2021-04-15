@@ -105,7 +105,7 @@ class Lane(UUIDModel, SortableMixin):
         GATHER = 'g', 'Gather'
         DISCUSS = 'd', 'Discuss'
 
-    board = models.ForeignKey('Board', on_delete=models.CASCADE)
+    board = models.ForeignKey('Board', on_delete=models.CASCADE, related_name='lanes')
     type = models.CharField(max_length=1, choices=Types.choices, default=Types.GATHER)
 
     title = models.CharField(max_length=512)
@@ -123,8 +123,8 @@ class Lane(UUIDModel, SortableMixin):
 class Card(UUIDModel, SortableMixin):
     """Card which is assigned to a board"""
 
-    board = models.ForeignKey('Board', on_delete=models.CASCADE)
-    lane = models.ForeignKey('Lane', on_delete=models.CASCADE)
+    board = models.ForeignKey('Board', on_delete=models.CASCADE, related_name='cards')
+    lane = models.ForeignKey('Lane', on_delete=models.CASCADE, related_name='cards')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cards_created")
 
     title = models.CharField(max_length=512)
